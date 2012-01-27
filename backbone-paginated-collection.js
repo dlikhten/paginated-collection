@@ -9,6 +9,9 @@
    *
    * calling #changePage with no args will effectively reset pagination
    *
+   * this will trigger a "paginated" event passing in the page # changed
+   * to as well as self. function(pageNumber, paginatedCollection)
+   *
    * do not modify this collection directly via #add/#remove, modify the
    * underlying origModel.
    */
@@ -30,7 +33,7 @@
     },
 
     totalPages: function() {
-      return Math.ceil(this.origModel.length / (this.perPage * 1.0));
+      return Math.ceil(this.origModel.length / this.perPage);
     },
 
     resetOrigModel: function() {
@@ -44,6 +47,7 @@
 
       var slice = this.origModel.models.slice(offset, end);
       this.reset(slice);
+      this.trigger("paginated", this.page, this);
     }
   });
 })(Backbone);

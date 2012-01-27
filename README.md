@@ -30,3 +30,5 @@ Please note: adding/removing/resetting the original model will force the
 collection to page to page #0. If you wish, you can preserve the page
 then page back to whatever page you had. Though it is not guaranteed
 that the page you had will still exist.
+
+Note that the "paginated" even will be triggered when the page changes.

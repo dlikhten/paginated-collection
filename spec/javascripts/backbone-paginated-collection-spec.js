@@ -46,5 +46,22 @@ describe("Backbone.PaginatedCollection", function() {
       expect(collection.at(0).get('value')).toEqual(2);
       expect(collection.at(1).get('value')).toEqual(3);
     });
+
+    it("should create an event that the page has changed", function() {
+      var triggered = 0;
+      var expectedPage;
+      collection.bind("paginated", function(page, obj) {
+        triggered += 1;
+        expect(page).toEqual(expectedPage);
+        expect(obj).toEqual(collection);
+      });
+      expectedPage = 0;
+      collection.changePage(0);
+
+      expectedPage = 3;
+      collection.changePage(3);
+
+      expect(triggered).toEqual(2);
+    });
   });
 });
