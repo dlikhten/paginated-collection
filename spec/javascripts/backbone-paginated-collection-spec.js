@@ -63,5 +63,24 @@ describe("Backbone.PaginatedCollection", function() {
 
       expect(triggered).toEqual(2);
     });
+
+    it("should not trigger a reset event", function() {
+      var triggered = 0;
+      collection.bind("reset", function() {
+        triggered += 1;
+      });
+      collection.changePage(1);
+      collection.changePage(2);
+      expect(triggered).toEqual(0);
+    });
+  });
+
+  it("should trigger a reset event when the underlying model changed", function() {
+    var triggered = 0;
+      collection.bind("reset", function() {
+        triggered += 1;
+      });
+      allModels.reset([new TehModel({value: 1})]);
+      expect(triggered).toEqual(1);
   });
 });
