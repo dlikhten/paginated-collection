@@ -33,6 +33,9 @@ SOFTWARE.
    * this will trigger a "paginated" event passing in the page # changed
    * to as well as self. function(pageNumber, paginatedCollection)
    *
+   * When paginating, the reset event is not triggered. When the underlying
+   * data model is reset, the reset event is triggered.
+   *
    * do not modify this collection directly via #add/#remove, modify the
    * underlying origModel.
    */
@@ -59,6 +62,7 @@ SOFTWARE.
 
     resetOrigModel: function() {
       this.changePage();
+      this.trigger("reset", this);
     },
 
     changePage: function(pageNumber) {
@@ -67,7 +71,7 @@ SOFTWARE.
       var end = offset + this.perPage;
 
       var slice = this.origModel.models.slice(offset, end);
-      this.reset(slice);
+      this.reset(slice, {silent: true});
       this.trigger("paginated", this.page, this);
     }
   });
