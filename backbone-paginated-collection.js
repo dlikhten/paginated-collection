@@ -37,42 +37,40 @@ SOFTWARE.
    * data model is reset, the reset event is triggered.
    *
    * do not modify this collection directly via #add/#remove, modify the
-   * underlying origModel.
+   * underlying collection.
    */
   Backbone.PaginatedCollection = Backbone.Collection.extend({
-    page: -1,
-    perPage: 3,
-    origModel: null,
-    model: null,
+    perPage: 3
+    ,page: -1
 
-    initialize: function(data) {
-      this.origModel = data.origModel;
+    ,initialize: function(data) {
+      this.collection = data.collection;
       this.perPage = data.perPage || this.perPage;
+      var collection = this.collection;
+      collection.bind("add", this.resetCollection, this);
+      collection.bind("remove", this.resetCollection, this);
+      collection.bind("reset", this.resetCollection, this);
+      this.changePage();
+    }
 
-      var origModel = this.origModel;
-      origModel.bind("add", this.resetOrigModel, this);
-      origModel.bind("remove", this.resetOrigModel, this);
-      origModel.bind("reset", this.resetOrigModel, this);
-      this.changePage(data.page);
-    },
+    ,totalPages: function() {
+      return Math.ceil(this.collection.length / this.perPage);
+    }
 
-    totalPages: function() {
-      return Math.ceil(this.origModel.length / this.perPage);
-    },
-
-    resetOrigModel: function() {
+    ,resetCollection: function() {
       this.changePage();
       this.trigger("reset", this);
-    },
+    }
 
-    changePage: function(pageNumber) {
-      this.page = pageNumber || 0;
-      var offset = this.page * this.perPage;
-      var end = offset + this.perPage;
+    ,changePage: function(pageNumber) {
+      var page = (this.page = pageNumber || 0);
+      var perPage = this.perPage;
+      var offset = page * perPage;
+      var end = offset + perPage;
 
-      var slice = this.origModel.models.slice(offset, end);
+      var slice = this.collection.models.slice(offset, end);
       this.reset(slice, {silent: true});
-      this.trigger("paginated", this.page, this);
+      this.trigger("paginated", page, this);
     }
   });
 })(Backbone);
