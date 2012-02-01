@@ -47,9 +47,9 @@ SOFTWARE.
       this.collection = data.collection;
       this.perPage = data.perPage || this.perPage;
       var collection = this.collection;
-      collection.bind("add", this.resetCollection, this);
-      collection.bind("remove", this.resetCollection, this);
-      collection.bind("reset", this.resetCollection, this);
+      collection.on("add", this.resetCollection, this);
+      collection.on("remove", this.resetCollection, this);
+      collection.on("reset", this.resetCollection, this);
       this.changePage();
     }
 
