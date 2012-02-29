@@ -20,7 +20,7 @@ these guys.
     var YourCollection = Backbone.Collection.extend({model: YourModel});
     var YourPaginatedCollection = Backbone.PaginatedCollection.extend({model: YourModel});
     var allItems = new YourCollection(...);
-    var paginatedItems = new YourPaginatedCollection({origModel: allItems});
+    var paginatedItems = new YourPaginatedCollection({collection: allItems});
     var paginatedItems.perPage = 5;
     var paginatedItems.changePage(3); // indices 10 - 14
     var paginatedItems.totalPages();  // for 20 items, 4
