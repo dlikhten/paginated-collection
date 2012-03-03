@@ -1,5 +1,5 @@
 describe("Backbone.PaginatedCollection", function() {
-  var TehModel = Backbone.RelationalModel.extend({
+  var TehModel = Backbone.Model.extend({
     defaults: {value: -1}
   });
 
