@@ -20,7 +20,11 @@ these guys.
     var YourCollection = Backbone.Collection.extend({model: YourModel});
     var YourPaginatedCollection = Backbone.PaginatedCollection.extend({model: YourModel});
     var allItems = new YourCollection(...);
-    var paginatedItems = new YourPaginatedCollection({collection: allItems});
+    // note the null argument. Backbone Collection wants the model
+    // to reset this collection to as the first argument. This
+    // collection only mutates by being a proxy to the underlying
+    // collection
+    var paginatedItems = new YourPaginatedCollection(null, {collection: allItems});
     var paginatedItems.perPage = 5;
     var paginatedItems.changePage(3); // indices 10 - 14
     var paginatedItems.totalPages();  // for 20 items, 4

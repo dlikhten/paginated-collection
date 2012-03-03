@@ -20,7 +20,7 @@ describe("Backbone.PaginatedCollection", function() {
       allModels.add(new TehModel({value: i}));
     }
 
-    collection = new ModelCollection({collection: allModels, perPage: 2});
+    collection = new ModelCollection(null, {collection: allModels, perPage: 2});
   });
 
   describe("#totalPages", function() {

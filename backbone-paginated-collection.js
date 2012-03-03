@@ -43,7 +43,8 @@ SOFTWARE.
     perPage: 3
     ,page: -1
 
-    ,initialize: function(data) {
+    ,initialize: function(models, data) {
+      if (models) throw "models cannot be set directly, unfortunately first argument is the models.";
       this.collection = data.collection;
       this.perPage = data.perPage || this.perPage;
       var collection = this.collection;
