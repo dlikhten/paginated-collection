@@ -74,5 +74,10 @@ SOFTWARE.
       this.reset(slice, {silent: true});
       this.trigger("paginated", page, this);
     }
+
+    ,_onModelEvent: function() {
+      // noop. This collection does not directly handle elements, rather it
+      // delegates all that work to the underlying collection
+    }
   });
 })(Backbone);
