@@ -36,3 +36,7 @@ then page back to whatever page you had. Though it is not guaranteed
 that the page you had will still exist.
 
 Note that the "paginated" even will be triggered when the page changes.
+
+# Testing
+
+`gem install jasmine --no-ri --no-rdoc` and then run `rake jasmine` go to `localhost:8888` and you are good to go.
