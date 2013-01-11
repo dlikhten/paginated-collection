@@ -75,12 +75,25 @@ describe("Backbone.PaginatedCollection", function() {
     });
   });
 
-  it("should trigger a reset event when the underlying model changed", function() {
-    var triggered = 0;
+  describe("events", function() {
+    it("should trigger a reset event when the underlying model changed", function() {
+      var triggered = 0;
       collection.bind("reset", function() {
         triggered += 1;
       });
       allModels.reset([new TehModel({value: 1})]);
       expect(triggered).toEqual(1);
+    });
+
+    it("should trigger a reset event when the underlying model has been sorted", function() {
+      var triggered = 0;
+      collection.bind("reset", function() {
+        triggered += 1;
+      });
+      allModels.comparator = function(model) { return model.get("value"); };
+      allModels.sort();
+
+      expect(triggered).toEqual(1);
+    });
   });
 });

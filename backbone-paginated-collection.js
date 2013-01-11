@@ -51,6 +51,7 @@ SOFTWARE.
       collection.on("add", this.resetCollection, this);
       collection.on("remove", this.resetCollection, this);
       collection.on("reset", this.resetCollection, this);
+      collection.on("sort", this.resetCollection, this);
       this.changePage();
     }
 
