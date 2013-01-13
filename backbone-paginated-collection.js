@@ -52,6 +52,9 @@ SOFTWARE.
       collection.on("remove", this._remove, this);
       collection.on("reset", this.reset, this);
       collection.on("sort", this.reset, this);
+
+      // filter-complete needs to be propagated, its important for this to happen
+      collection.on("filter-complete", function() { console.log("triggering filter complete");this.trigger("filter-complete", this); }, this);
       this.changePage();
     }
 

@@ -321,5 +321,15 @@ describe("Backbone.PaginatedCollection", function() {
 
       expect(triggered).toEqual(1);
     });
+
+    it("should trigger a filter-complete event when underlying model triggers it", function() {
+      var triggered = 0;
+      collection.bind("filter-complete", function() {
+        triggered += 1;
+      });
+      allModels.trigger("filter-complete");
+
+      expect(triggered).toEqual(1);
+    });
   });
 });
