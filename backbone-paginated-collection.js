@@ -60,11 +60,13 @@ SOFTWARE.
       var paginatedOffset = this.paginatedOffset(where);
 
       if (paginatedOffset < this.perPage) {
-        // always remove the last element, that's always shifted over
-        var removeIndex = this.models.length - 1;
-        var toRemove = this.models[removeIndex];
-        this.remove(toRemove);
-        this.triggerRemove(toRemove, removeIndex, options);
+        if(this.lastPage() !== this.page) {
+          // always remove the last element, that's always shifted over
+          var removeIndex = this.models.length - 1;
+          var toRemove = this.models[removeIndex];
+          this.remove(toRemove);
+          this.triggerRemove(toRemove, removeIndex, options);
+        }
 
         var toAdd;
         var toAddIndex;

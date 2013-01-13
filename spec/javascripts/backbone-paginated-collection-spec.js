@@ -148,6 +148,22 @@ describe("Backbone.PaginatedCollection", function() {
       expect(modelAdded).toEqual(toBeAdded);
       expect(modelRemoved).toEqual(toBeRemoved);
     });
+
+    it("should just add when added to the last page", function() {
+      allModels.add(toBeAdded, {at: 3})
+      collection.changePage(5)
+
+      addedIndex = null
+      removedIndex = null
+      modelAdded = null
+      modelRemoved = null
+
+      toBeAdded = new TehModel({value: 11});
+      allModels.add(toBeAdded)
+
+      expect(modelAdded).toEqual(toBeAdded)
+      expect(modelRemoved).toEqual(null)
+    });
   });
 
   describe("event:remove", function() {
@@ -214,6 +230,18 @@ describe("Backbone.PaginatedCollection", function() {
       expect(removedIndex).toEqual(0);
       expect(modelAdded).toBeFalsy();
       expect(addedIndex).toEqual(null);
+    });
+
+    it("is ok when multiple elements are removed", function() {
+      collection.changePage(0);
+      allModels.remove(allModels.models[0]);
+      allModels.remove(allModels.models[0]);
+      allModels.remove(allModels.models[0]);
+      allModels.remove(allModels.models[0]);
+      allModels.remove(allModels.models[0]);
+      allModels.remove(allModels.models[0]);
+
+      expect(collection.models[0]).toEqual(allModels.models[0])
     });
   });
 
