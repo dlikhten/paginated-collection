@@ -59,7 +59,7 @@ SOFTWARE.
     }
 
     ,_add: function(model, collection, options) {
-      var where = (options && options.at != null) ? options.at : this.collection.models.length - 1;
+      var where = this.collection.indexOf(model);
       var paginatedOffset = this.paginatedOffset(where);
 
       if (paginatedOffset < this.perPage) {
