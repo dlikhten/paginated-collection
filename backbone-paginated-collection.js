@@ -68,8 +68,16 @@ SOFTWARE.
       this.listenTo(collection, "sort", this.reset);
 
       // filter-complete needs to be propagated, its important for this to happen
-      this.listenTo(collection, "filter-complete", function() {
-        this.trigger("filter-complete", this);
+      this.listenTo(collection, "all", function(eventName) {
+        switch(eventName) {
+          case "add":
+          case "remove":
+          case "reset":
+          case "sort":
+            break;
+          default:
+            this.trigger.apply(this, arguments);
+        }
       });
       this.changePage();
     }
