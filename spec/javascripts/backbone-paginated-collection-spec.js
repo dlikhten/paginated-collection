@@ -7,10 +7,6 @@ describe("Backbone.PaginatedCollection", function() {
     model: TehModel
   });
 
-  var ModelCollection = Backbone.PaginatedCollection.extend({
-    model: TehModel
-  });
-
   var allModels;
   var collection;
 
@@ -26,7 +22,7 @@ describe("Backbone.PaginatedCollection", function() {
       allModels.add(new TehModel({value: i}));
     }
 
-    collection = new ModelCollection(null, {collection: allModels, perPage: 2});
+    collection = new Backbone.PaginatedCollection(null, {collection: allModels, perPage: 2});
   });
   beforeEach(function() {
     modelRemoved = null;
