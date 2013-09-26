@@ -62,13 +62,15 @@ SOFTWARE.
         throw "invalid perPage value"
       }
       var collection = this.collection;
-      collection.on("add", this._add, this);
-      collection.on("remove", this._remove, this);
-      collection.on("reset", this.reset, this);
-      collection.on("sort", this.reset, this);
+      this.listenTo(collection, "add", this._add);
+      this.listenTo(collection, "remove", this._remove);
+      this.listenTo(collection, "reset", this.reset);
+      this.listenTo(collection, "sort", this.reset);
 
       // filter-complete needs to be propagated, its important for this to happen
-      collection.on("filter-complete", function() { this.trigger("filter-complete", this); }, this);
+      this.listenTo(collection, "filter-complete", function() {
+        this.trigger("filter-complete", this);
+      });
       this.changePage();
     }
 
