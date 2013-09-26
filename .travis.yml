@@ -1,2 +1,5 @@
-install: bundle
+language: ruby
+rvm:
+  - 2.0.0
+install: gem install jasmine --no-rdoc --no-ri
 script: rake jasmine:ci
