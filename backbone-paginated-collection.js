@@ -43,7 +43,7 @@ SOFTWARE.
    */
   Backbone.PaginatedCollection = Backbone.Collection.extend({
     perPage: 3
-    ,page: -1
+    ,page: 0
 
     ,initialize: function(models, data) {
       if (models) throw "models cannot be set directly, unfortunately first argument is the models.";
@@ -134,9 +134,8 @@ SOFTWARE.
       }
     }
 
-    ,offset: function(extraPages) {
-      extraPages = extraPages || 0;
-      return ((this.page + extraPages) * this.perPage);
+    ,offset: function() {
+      return this.page * this.perPage;
     }
 
     ,modelToRemove: function(desiredModel, index) {
@@ -165,7 +164,7 @@ SOFTWARE.
     }
 
     ,totalPages: function() {
-      return Math.ceil(this.collection.length / this.perPage);
+      return Math.ceil(this.collection.length / this.perPage) || 1;
     }
 
     ,lastPage: function() {
@@ -186,6 +185,9 @@ SOFTWARE.
 
     ,changePage: function(pageNumber) {
       this.page = pageNumber || 0;
+      if (this.page < 0) this.page = 0;
+      var lastPage = this.lastPage();
+      if (this.page > lastPage) this.page = lastPage;
 
       this.syncPage();
       this.trigger("paginated", this.page, this);
@@ -197,3 +199,4 @@ SOFTWARE.
     }
   });
 })(Backbone);
+
