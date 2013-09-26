@@ -49,6 +49,9 @@ SOFTWARE.
       if (models) throw "models cannot be set directly, unfortunately first argument is the models.";
       this.collection = data.collection;
       this.perPage = data.perPage || this.perPage;
+      if (this.perPage === 0) {
+        throw "invalid perPage value"
+      }
       var collection = this.collection;
       collection.on("add", this._add, this);
       collection.on("remove", this._remove, this);
