@@ -32,13 +32,22 @@ SOFTWARE.
    *
    * calling #changePage with no args will effectively reset pagination
    *
-   * this will trigger a "paginated" event passing in the page # changed
-   * to as well as self. function(pageNumber, paginatedCollection)
+   * events:
+   *   add                - an item was added to this page
+   *   remove             - an item was removed from this page
+   *   paginated          - changed pages
+   *   add-other-page     - an item was added on some other page
+   *   remove-other-page  - an item was removed from some other page
    *
    * When paginating, the reset event is not triggered. When the underlying
    * data model is reset, the reset event is triggered.
    *
-   * do not modify this collection directly via #add/#remove, modify the
+   * Pages:
+   *   If the collection is empty, you will be on page 0
+   *   If you move to page below 0, you will be on page 0
+   *   If you move to page above max, you will be at the last page.
+   *
+   * do not modify this collection directly via #add/#remove/#reset/etc., modify the
    * underlying collection.
    */
   Backbone.PaginatedCollection = Backbone.Collection.extend({
@@ -90,9 +99,12 @@ SOFTWARE.
         this.add(toAdd, {at: toAddIndex});
         this.triggerAdd(toAdd, toAddIndex, options);
       }
+      else {
+        // total pages have changed, we must do something to notify about this
+        this.trigger("add-other-page", this.page, this);
+      }
     }
 
-    // when a model is removed from the underlying collection one of three things will be true
     ,_remove: function(model, collection, options) {
       var toRemove = this.modelToRemove(model, options.index);
 
@@ -123,6 +135,10 @@ SOFTWARE.
           var addIndex = this.models.length - 1;
           this.triggerAdd(this.models[addIndex], addIndex, options);
         }
+      }
+      else {
+        // total pages have changed, we must do something to notify about this
+        this.trigger("remove-other-page", this.page, this);
       }
     }
 
