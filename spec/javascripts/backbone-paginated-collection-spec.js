@@ -28,7 +28,6 @@ describe("Backbone.PaginatedCollection", function() {
 
     collection = new ModelCollection(null, {collection: allModels, perPage: 2});
   });
-
   beforeEach(function() {
     modelRemoved = null;
     removedIndex = null;
@@ -36,18 +35,21 @@ describe("Backbone.PaginatedCollection", function() {
     addedIndex = null;
     paginatedCount = 0;
 
-    collection.bind("remove", function(model, collection, options) {
+    collection.on("remove", function(model, collection, options) {
       modelRemoved = model;
       removedIndex = options.index;
     });
-    collection.bind("add", function(model, collection, options) {
+    collection.on("add", function(model, collection, options) {
       modelAdded = model;
       addedIndex = options.index;
     });
-    collection.bind("paginated", function() {
+    collection.on("paginated", function() {
       paginatedCount += 1;
-
     });
+  });
+
+  afterEach(function() {
+    collection.off(null, null, null);
   });
 
   describe("#totalPages", function() {
@@ -99,6 +101,16 @@ describe("Backbone.PaginatedCollection", function() {
       collection.changePage(1);
       collection.changePage(2);
       expect(triggered).toEqual(0);
+    });
+
+    it("should go to page 0 when setting to -1", function() {
+      collection.changePage(-1);
+      expect(collection.page).toEqual(0);
+    });
+
+    it("should go to last page when setting to beyond", function() {
+      collection.changePage(collection.lastPage() + 1);
+      expect(collection.page).toEqual(collection.lastPage());
     });
   });
 
@@ -163,6 +175,17 @@ describe("Backbone.PaginatedCollection", function() {
 
       expect(modelAdded).toEqual(toBeAdded)
       expect(modelRemoved).toEqual(null)
+    });
+
+    it("notifies when an element is removed from a different page", function() {
+      spyOther = jasmine.createSpy("other page added");
+      collection.changePage(0);
+      collection.on("add-other-page", spyOther);
+
+      toBeAdded = new TehModel({value: 11});
+      allModels.add(toBeAdded);
+
+      expect(spyOther).toHaveBeenCalled();
     });
   });
 
@@ -243,6 +266,16 @@ describe("Backbone.PaginatedCollection", function() {
 
       expect(collection.models[0]).toEqual(allModels.models[0])
     });
+
+    it("notifies when an element is removed from a different page", function() {
+      spyOtherRemoved = jasmine.createSpy("other page removed");
+      collection.changePage(0);
+      collection.on("remove-other-page", spyOtherRemoved);
+
+      allModels.remove(allModels.models[7]);
+
+      expect(spyOtherRemoved).toHaveBeenCalled();
+    });
   });
 
   describe("#lastPage", function() {
@@ -298,6 +331,13 @@ describe("Backbone.PaginatedCollection", function() {
       collection.changePage(2);
 
       expect(collection.paginatedOffset(4)).toEqual(0);
+    });
+
+    it("returns the offset if there are no elements in the collection", function() {
+      for(var i = 0; i < 10; i++) allModels.remove(allModels.at(0))
+      collection.changePage(0);
+
+      expect(collection.paginatedOffset(1)).toEqual(1);
     });
   });
 
