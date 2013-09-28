@@ -1,5 +1,7 @@
 # Paginated Collection
 
+[![Build Status](https://travis-ci.org/dlikhten/paginated-collection.png?branch=master)](https://travis-ci.org/dlikhten/paginated-collection)
+
 This is a simple paginated collection implemented using
 Backbone.Collection. The goal here is to create a collection which will
 show a subset of the original collection depending on the page.
